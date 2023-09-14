@@ -2,12 +2,12 @@
 
 A simple app with a login and a table page.
 
-## Run the app
+### Run the app
 
 Run the app with `npm start`.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-For the moment use any username and password will do; the button will be enabled for click.
+For the moment, use any username and password; the button will be enabled for click.
 
 ### Run tests
 
