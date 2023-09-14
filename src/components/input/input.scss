@@ -1,0 +1,64 @@
+.field {
+	position: relative;
+	display: flex;
+	flex-flow: column;
+	margin-bottom: 2rem;
+	border-radius: 0.5rem;
+	border: 1px solid #ededed;
+	background-color: #ededed;
+}
+
+.label {
+	font-weight: 600;
+}
+
+.input {
+	padding: 1rem;
+	color: #0f2c59;
+	z-index: 10;
+	border: none;
+	background-color: transparent;
+
+	&-error {
+		text-align: left;
+		color: red;
+		border-top: 1px solid red;
+		margin: 0.5rem;
+	}
+
+	&.input---float {
+		&::placeholder {
+			color: transparent;
+		}
+
+		&:focus,
+		&:not(:placeholder-shown) {
+			+ .label {
+				opacity: 1;
+				left: 0;
+				transform: translate(0, -2rem) scale(0.8);
+				color: #0f2c59;
+				z-index: 5;
+			}
+		}
+
+		& + .label {
+			opacity: 0.3;
+			transition: all 200ms ease-in-out;
+			transform-origin: 0 0;
+			line-height: 1;
+			user-select: none;
+		}
+
+		& + .label {
+			position: absolute;
+			top: 1rem;
+			left: 0.75rem;
+			user-select: none;
+		}
+	}
+
+	&:focus {
+		outline: 0;
+	}
+}

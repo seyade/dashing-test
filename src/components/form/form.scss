@@ -1,0 +1,11 @@
+.form {
+	padding: 1rem 2rem 1rem;
+	border-radius: 0.5rem;
+	box-shadow: 0 0 1rem rgba(0, 0, 0, 0.125);
+	color: #0f2c59;
+	background-color: #fff;
+
+	&-content {
+		margin-top: 2rem;
+	}
+}

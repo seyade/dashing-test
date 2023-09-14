@@ -1,0 +1,22 @@
+.button {
+	width: 100%;
+	padding: 1rem 2rem;
+	font-weight: 600;
+	border: 0.125rem solid #0f2c59;
+	background-color: #0f2c59;
+	color: #fff;
+	border-radius: 2rem;
+	transition: all 250ms ease-in-out;
+	cursor: pointer;
+
+	&:not(:disabled):hover {
+		background-color: #fff;
+		color: #0f2c59;
+		border: 0.125rem solid #0f2c59;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
