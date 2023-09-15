@@ -1,16 +1,20 @@
-import { ReactNode } from "react";
+import { ReactNode, ButtonHTMLAttributes } from "react";
 
 import "./button.scss";
 
-type ButtonProps = {
-	children: ReactNode;
-	disabled?: boolean;
-	onClick?: () => void;
+// type ButtonProps = {
+// 	children: ReactNode;
+// 	disabled?: boolean;
+// 	onClick?: () => void;
+// } & ButtonHTMLAttributes<HTMLButtonElement>;
+
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+	className?: string;
 };
 
-const Button = ({ children, disabled, ...props }: ButtonProps) => {
+const Button = ({ children, disabled, className, ...props }: ButtonProps) => {
 	return (
-		<button className="button" disabled={disabled} {...props}>
+		<button className={`button ${className}`} disabled={disabled} {...props}>
 			{children}
 		</button>
 	);

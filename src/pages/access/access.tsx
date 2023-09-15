@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
+import Button from "../../components/button";
 import Table from "../../components/table";
 
 import "./access.scss";
+
+type UserData = {
+	username: string;
+	password: string;
+};
 
 type User = {
 	name: string;
@@ -12,7 +19,9 @@ type User = {
 };
 
 const Access = () => {
+	const navigate = useNavigate();
 	const [users, setUsers] = useState<User[]>([]);
+	const [userData, setUserData] = useState<UserData | null>(null);
 
 	const columns = [
 		{ label: "Name", key: "name" },
@@ -20,6 +29,15 @@ const Access = () => {
 		{ label: "Username", key: "username" },
 		{ label: "Web", key: "web" },
 	];
+
+	const handleSignOut = () => {
+		localStorage.clear();
+		navigate("/");
+	};
+
+	useEffect(() => {
+		setUserData(JSON.parse(localStorage.getItem("user") as string));
+	}, []);
 
 	useEffect(() => {
 		async function getUsers() {
@@ -39,9 +57,20 @@ const Access = () => {
 
 	return (
 		<div className="page">
-			<h1 className="page-title">Your metaverse team.</h1>
+			<header className="page-header">
+				<h1 className="logo">
+					<Link to="/">DZCHAIN</Link>
+				</h1>
+
+				<Button className="page__sign-out" onClick={handleSignOut}>
+					Sign out
+				</Button>
+			</header>
 
 			<div className="page-content">
+				<h1 className="page-title">
+					Welcome to your metaverse team, {userData && `@${userData?.username}`}
+				</h1>
 				<Table<User> data={users} columns={columns} />
 			</div>
 		</div>

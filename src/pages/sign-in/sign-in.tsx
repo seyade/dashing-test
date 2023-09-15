@@ -28,6 +28,7 @@ const SignIn = () => {
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setFieldErrors(validate(formValues));
+		localStorage.setItem("user", JSON.stringify(formValues));
 		navigate("/access");
 	};
 

@@ -2,6 +2,34 @@
 	&-title {
 		text-align: center;
 	}
+
+	&-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem;
+		background-color: #fff;
+	}
+
+	&__sign-out.button {
+		background-color: transparent;
+		color: #000;
+		width: auto;
+		border: none;
+		transition: none;
+		padding: 0;
+
+		&:hover {
+			background-color: transparent;
+			color: #0f2c59;
+			border: none;
+			text-decoration: underline;
+		}
+	}
+
+	&-content {
+		padding: 2rem;
+	}
 }
 
 .logo {
@@ -10,6 +38,13 @@
 	align-items: center;
 	position: relative;
 	color: #0f2c59;
+	font-size: 1.5rem;
+	text-decoration: none;
+
+	a {
+		color: #0f2c59;
+		text-decoration: none;
+	}
 
 	// background-color: orange;
 
