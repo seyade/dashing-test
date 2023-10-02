@@ -1,65 +1,84 @@
-import { act, render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import SignIn from "./sign-in";
 
-describe("SignIn", () => {
+describe("SignIn Form", () => {
 	it("renders correctly", () => {
 		render(
-			<BrowserRouter>
+			<MemoryRouter>
 				<SignIn />
-			</BrowserRouter>
+			</MemoryRouter>
 		);
-		const element = screen.getByText("Enjoy the Metaverse as you sign in.");
+		const element = screen.getByText(/Username/i);
 		expect(element).toBeInTheDocument();
 	});
 
-	it("Username field is rendered", () => {
-		render(
-			<BrowserRouter>
-				<SignIn />
-			</BrowserRouter>
-		);
-		const element = screen.getByText("Username");
-		expect(element).toBeInTheDocument();
-	});
-
-	it("Password field is rendered", () => {
-		render(
-			<BrowserRouter>
-				<SignIn />
-			</BrowserRouter>
-		);
-		const element = screen.getByText("Password");
-		expect(element).toBeInTheDocument();
-	});
-
-	it("Button is disabled", () => {
-		render(
-			<BrowserRouter>
-				<SignIn />
-			</BrowserRouter>
-		);
-		const button = screen.getByText("Sign in");
-		expect(button).toBeDisabled();
-	});
-
-	describe("Sign in action", () => {
-		it("Button is enabled", () => {
+	describe("Validation", () => {
+		it("should not submit the form when fields are empty", () => {
 			render(
-				<BrowserRouter>
+				<MemoryRouter>
 					<SignIn />
-				</BrowserRouter>
+				</MemoryRouter>
 			);
 
-			const usernameField = screen.getByText("Username");
-			const passwordField = screen.getByText("Password");
-			const button = screen.getByText("Sign in");
+			const submitButton = screen.getByRole("button");
 
-			userEvent.type(usernameField, "myUsername");
-			userEvent.type(passwordField, "myPassword");
+			fireEvent.submit(submitButton);
 
-			expect(button).not.toBeDisabled();
+			const usernameErrorMsg = screen.getByText("Enter your username");
+			const passwordErrorMsg = screen.getByText("Enter your password");
+
+			expect(usernameErrorMsg).toHaveTextContent("Enter your username");
+			expect(passwordErrorMsg).toHaveTextContent("Enter your password");
+		});
+
+		it("should say the username does not exist", () => {
+			render(
+				<MemoryRouter>
+					<SignIn />
+				</MemoryRouter>
+			);
+
+			const usernameField = screen.getByLabelText(/Username/i);
+			const submitButton = screen.getAllByText(/Sign in/i)[0];
+
+			userEvent.type(usernameField, "FakeUser");
+
+			fireEvent.submit(submitButton);
+
+			const usernameErrorMsg = screen.getByText(
+				"This username does not exist."
+			);
+
+			expect(usernameErrorMsg).toHaveTextContent(
+				"This username does not exist."
+			);
+		});
+
+		it("should say password doesn't match the username", () => {
+			render(
+				<MemoryRouter>
+					<SignIn />
+				</MemoryRouter>
+			);
+
+			const usernameField = screen.getByLabelText(/Username/i);
+			const passwordField = screen.getByLabelText(/Password/i);
+			const submitButton = screen.getByRole("button");
+
+			userEvent.type(usernameField, "Ryuseioh");
+			userEvent.type(passwordField, "wrongPassword");
+
+			fireEvent.submit(submitButton);
+
+			const passwordErrorMsg = screen.getByText(
+				"Password doesn't match the username"
+			);
+
+			expect(passwordErrorMsg).toHaveTextContent(
+				"Password doesn't match the username"
+			);
 		});
 	});
 });
