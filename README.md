@@ -9,7 +9,7 @@ You'll notice that I'm using hyphenated word for component names instead of the 
 Run the app with `npm start`.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Use these 3 users to login (they're injected automatocally in localStorage when the app is loaded). Each of these users has different access for editing the table:
+Use these 3 users to login (they're injected automatocally in localStorage when the app is loaded). Each of these users has different type of access role to enable editing on the table:
 
 (role: all)
 username: `Ryuseioh`
