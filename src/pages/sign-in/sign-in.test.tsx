@@ -1,5 +1,4 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import SignIn from "./sign-in";
 
@@ -33,17 +32,17 @@ describe("SignIn Form", () => {
 			expect(passwordErrorMsg).toHaveTextContent("Enter your password");
 		});
 
-		it("should say the username does not exist", () => {
+		it("should say the username does not exist", async () => {
 			render(
 				<MemoryRouter>
 					<SignIn />
 				</MemoryRouter>
 			);
-
 			const usernameField = screen.getByLabelText(/Username/i);
-			const submitButton = screen.getAllByText(/Sign in/i)[0];
 
-			userEvent.type(usernameField, "FakeUser");
+			fireEvent.change(usernameField, { target: { value: "FakeUser" } });
+
+			const submitButton = screen.getAllByText(/Sign in/i)[0];
 
 			fireEvent.submit(submitButton);
 
@@ -67,8 +66,8 @@ describe("SignIn Form", () => {
 			const passwordField = screen.getByLabelText(/Password/i);
 			const submitButton = screen.getByRole("button");
 
-			userEvent.type(usernameField, "Ryuseioh");
-			userEvent.type(passwordField, "wrongPassword");
+			fireEvent.change(usernameField, { target: { value: "Ryuseioh" } });
+			fireEvent.change(passwordField, { target: { value: "wrongPassword" } });
 
 			fireEvent.submit(submitButton);
 
