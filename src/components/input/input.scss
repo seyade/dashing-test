@@ -3,9 +3,6 @@
 	display: flex;
 	flex-flow: column;
 	margin-bottom: 2rem;
-	border-radius: 0.5rem;
-	border: 1px solid #ededed;
-	background-color: #ededed;
 }
 
 .label {
@@ -16,14 +13,28 @@
 	padding: 1rem;
 	color: #0f2c59;
 	z-index: 10;
-	border: none;
+	font-size: 1rem;
+	border: 1px solid #ededed;
+	border-radius: 0.5rem;
 	background-color: transparent;
 
-	&-error {
+	& ~ .input-error {
 		text-align: left;
+		font-size: 0.9rem;
 		color: red;
-		border-top: 1px solid red;
-		margin: 0.5rem;
+		margin: 0.25rem 0;
+	}
+
+	// &:invalid[focused="true"] {
+	// 	border: 1px solid red;
+	// }
+
+	// &:invalid[focused="true"] ~ span {
+	// 	display: block;
+	// }
+
+	&:focus {
+		outline: 0;
 	}
 
 	&.input---float {
@@ -56,9 +67,5 @@
 			left: 0.75rem;
 			user-select: none;
 		}
-	}
-
-	&:focus {
-		outline: 0;
 	}
 }

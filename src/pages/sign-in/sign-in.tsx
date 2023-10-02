@@ -8,13 +8,28 @@ import Text from "../../components/text";
 
 import "./sign-in.scss";
 
+type Profile = {
+	id: number | string;
+	username: string;
+	password: string;
+	role: string[];
+};
+
 const SignIn = () => {
-	const initialValues = { username: "", password: "" };
+	// set existing users
+	const userProfiles: Profile[] = [
+		{ id: 0, username: "Ryuseioh", password: "admin1", role: ["all"] },
+		{ id: 1, username: "Houou", password: "admin2", role: ["editor"] },
+	];
+
+	localStorage.setItem("profiles", JSON.stringify(userProfiles));
+
+	const formInitialValues = { username: "", password: "" };
+
+	const [formValues, setFormValues] = useState(formInitialValues);
+	const [fieldErrors, setFieldErrors] = useState<any>({});
 
 	const navigate = useNavigate();
-
-	const [formValues, setFormValues] = useState(initialValues);
-	const [fieldErrors, setFieldErrors] = useState<any>({});
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.currentTarget;
@@ -22,31 +37,36 @@ const SignIn = () => {
 			...formValues,
 			[name]: value,
 		});
-		setFieldErrors((prevState: any) => ({ ...prevState, [name]: "" }));
 	};
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		setFieldErrors(validate(formValues));
-		localStorage.setItem("user", JSON.stringify(formValues));
-		navigate("/access");
-	};
 
-	const validate = (values: typeof formValues) => {
-		const errors: any = {};
+		const validationErrors: any = {};
+		const profiles = JSON.parse(localStorage.getItem("profiles") as string);
 
-		if (!values.username) {
-			errors.username = "Please enter your username";
+		const profile = profiles.find(
+			(profile: Profile) => profile.username === formValues.username
+		);
+
+		if (formValues.username.trim() === "") {
+			validationErrors.username = "Enter your username";
+		} else if (!profile) {
+			validationErrors.username = "This username does not exist.";
 		}
 
-		if (!values.password) {
-			errors.password = "Please enter your password";
+		if (!formValues.password.trim()) {
+			validationErrors.password = "Enter your password";
+		} else if (profile && formValues.password !== profile.password) {
+			validationErrors.password = "Password doesn't match the username";
 		}
 
-		return errors;
+		if (Object.keys(validationErrors).length === 0) {
+			navigate("/access", { state: formValues.username });
+		} else {
+			setFieldErrors(validationErrors);
+		}
 	};
-
-	const isValid = formValues.username && formValues.password;
 
 	return (
 		<main className="page sign-in">
@@ -64,7 +84,7 @@ const SignIn = () => {
 								onChange={handleChange}
 								placeholder="Username"
 								value={formValues.username}
-								error={fieldErrors}
+								errorMessage={fieldErrors.username}
 								floatLabel
 							/>
 
@@ -76,11 +96,11 @@ const SignIn = () => {
 								onChange={handleChange}
 								placeholder="Password"
 								value={formValues.password}
-								error={fieldErrors}
+								errorMessage={fieldErrors.password}
 								floatLabel
 							/>
 
-							<Button disabled={!isValid}>Sign in</Button>
+							<Button disabled={false}>Sign in</Button>
 
 							<Text>
 								Forgot your password? click <Link to="/">here.</Link>
@@ -90,7 +110,8 @@ const SignIn = () => {
 				</div>
 			</section>
 			<section className="sign-in__section sign-in__section--inverse">
-				<h2 className="sign-in__section__title">
+				<h1 className="logo">DZCHAIN</h1>
+				<h2 className="sign-in__section__subtitle">
 					Welcome to another universe.
 				</h2>
 				<Text>

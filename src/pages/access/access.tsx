@@ -6,9 +6,10 @@ import Table from "../../components/table";
 
 import "./access.scss";
 
-type UserData = {
+type ProfileData = {
 	username: string;
 	password: string;
+	role?: string[];
 };
 
 type User = {
@@ -21,7 +22,7 @@ type User = {
 const Access = () => {
 	const navigate = useNavigate();
 	const [users, setUsers] = useState<User[]>([]);
-	const [userData, setUserData] = useState<UserData | null>(null);
+	const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
 	const columns = [
 		{ label: "Name", key: "name" },
@@ -36,7 +37,13 @@ const Access = () => {
 	};
 
 	useEffect(() => {
-		setUserData(JSON.parse(localStorage.getItem("user") as string));
+		const profiles = JSON.parse(localStorage.getItem("profiles") as string);
+
+		const profileData = profiles.filter(
+			(profile: ProfileData) => profile.username === window.history.state.usr
+		);
+
+		setProfileData(profileData[0]);
 	}, []);
 
 	useEffect(() => {
@@ -69,7 +76,8 @@ const Access = () => {
 
 			<div className="page-content">
 				<h1 className="page-title">
-					Welcome to your metaverse team, {userData && `@${userData?.username}`}
+					Welcome to your metaverse team,{" "}
+					{profileData && `@${profileData?.username}`}
 				</h1>
 				<Table<User> data={users} columns={columns} />
 			</div>

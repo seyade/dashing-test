@@ -9,7 +9,7 @@ type FormProps = {
 
 export const Form = ({ onSubmit, children, ...props }: FormProps) => {
 	return (
-		<form className="form" onSubmit={onSubmit} {...props}>
+		<form className="form" aria-label="form" onSubmit={onSubmit} {...props}>
 			{children}
 		</form>
 	);

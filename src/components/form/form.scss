@@ -1,11 +1,24 @@
 .form {
 	padding: 1rem 2rem 1rem;
+	margin: 0;
 	border-radius: 0.5rem;
 	box-shadow: 0 0 1rem rgba(0, 0, 0, 0.125);
 	color: #0f2c59;
 	background-color: #fff;
 
-	&-content {
-		margin-top: 2rem;
+	// &-content {
+	// 	margin-top: 2rem;
+	// }
+
+	.text {
+		margin: 0 0 1rem;
+	}
+
+	@media screen and (min-width: 1024px) {
+		padding: 1rem 2rem 1rem;
+
+		&-content {
+			margin-top: 2rem;
+		}
 	}
 }

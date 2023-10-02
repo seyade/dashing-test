@@ -1,40 +1,40 @@
-import { ChangeEvent } from "react";
+import { ComponentPropsWithoutRef, useState } from "react";
 import "./input.scss";
 
-type InputProps = {
-	id?: string;
+type InputProps = ComponentPropsWithoutRef<"input"> & {
 	label?: string;
-	name: string;
-	placeholder?: string;
-	value: string;
-	type?: string;
-	error?: any;
+	errorMessage?: string;
 	errorOff?: boolean;
 	floatLabel?: boolean;
-	onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+	focused?: boolean;
 };
 
 const Input = ({
 	id,
-	name,
 	onChange,
 	placeholder,
-	value,
 	label,
-	error,
+	errorMessage,
 	errorOff,
 	floatLabel = false,
 	...props
 }: InputProps) => {
+	const [isFocused, setIsFocused] = useState(false);
+
+	const handleFocus = () => {
+		setIsFocused(true);
+	};
+
 	return (
 		<div className="field">
 			<input
-				className={`input ${floatLabel && "input---float"}`}
 				id={id}
-				name={name}
+				className={`input ${floatLabel && "input---float"}`}
+				aria-label={label}
 				onChange={onChange}
 				placeholder={placeholder}
-				value={value}
+				onBlur={handleFocus}
+				focused={isFocused.toString()}
 				{...props}
 			/>
 			{label && (
@@ -42,9 +42,7 @@ const Input = ({
 					{label}
 				</label>
 			)}
-			{error !== undefined && error[name] && (
-				<p className="input-error">{error[name]}</p>
-			)}
+			{errorMessage && <span className="input-error">{errorMessage}</span>}
 		</div>
 	);
 };
