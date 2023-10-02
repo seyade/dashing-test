@@ -12,14 +12,15 @@ type Profile = {
 	id: number | string;
 	username: string;
 	password: string;
-	role: string[];
+	role: string;
 };
 
 const SignIn = () => {
 	// set existing users
 	const userProfiles: Profile[] = [
-		{ id: 0, username: "Ryuseioh", password: "admin1", role: ["all"] },
-		{ id: 1, username: "Houou", password: "admin2", role: ["editor"] },
+		{ id: 0, username: "Ryuseioh", password: "admin1", role: "all" },
+		{ id: 1, username: "Houou", password: "admin2", role: "editor" },
+		{ id: 1, username: "Kirin", password: "admin3", role: "" },
 	];
 
 	localStorage.setItem("profiles", JSON.stringify(userProfiles));

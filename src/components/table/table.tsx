@@ -8,19 +8,32 @@ import "./table.scss";
 type TableProps<T> = {
 	data: T[];
 	columns: any[];
+	hasAccess?: string | undefined;
 };
 
-const Table = <T,>({ data, columns }: TableProps<T>) => {
+const Table = <T,>({ data, columns, hasAccess }: TableProps<T>) => {
 	const [search, setSearch] = useState("");
+	const [tableData, setTableData] = useState<T[]>([]);
 
 	const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = event?.currentTarget;
+
 		setSearch(value);
+
+		setTableData(
+			data.filter((item: any) =>
+				columns
+					.map(head => item[head.key])
+					.join(" ")
+					.toLowerCase()
+					.includes(value.toLowerCase())
+			)
+		);
 	};
 
 	useEffect(() => {
-		console.log("SEARCH:::", search, data);
-	}, [search, data]);
+		setTableData(data);
+	}, [data]);
 
 	return (
 		<div className="table-panel">
@@ -33,34 +46,42 @@ const Table = <T,>({ data, columns }: TableProps<T>) => {
 				/>
 			</div>
 
-			<table className="table">
-				<thead>
-					<tr>
-						{columns.map(head => (
-							<th key={head.label}>{head.label}</th>
-						))}
-					</tr>
-				</thead>
-				<tbody>
-					{data
-						.filter((item: any) =>
-							columns
-								.map(head => item[head.key])
-								.join(" ")
-								.toLowerCase()
-								.includes(search.toLowerCase())
-						)
-						.map((item: any) => (
-							<tr key={item.name}>
-								<td>{item.name}</td>
-								<td>{item.email}</td>
-								<td>{item.username}</td>
-								<td>{item.website}</td>
-							</tr>
-						))}
-				</tbody>
-			</table>
-			{data.length === 0 && <h3>No Users</h3>}
+			{tableData.length !== 0 ? (
+				<table className="table">
+					<thead>
+						<tr>
+							{columns.map(head => (
+								<th key={head.label}>{head.label}</th>
+							))}
+							{(hasAccess === "editor" || hasAccess === "all") && (
+								<th>Action</th>
+							)}
+						</tr>
+					</thead>
+					<tbody>
+						{tableData.map((item: any) => {
+							return (
+								<tr key={item.name}>
+									<td>{item.name}</td>
+									<td>{item.email}</td>
+									<td>{item.username}</td>
+									<td>{item.website}</td>
+
+									{(hasAccess === "editor" || hasAccess === "all") && (
+										<td>
+											<button>Edit</button>
+										</td>
+									)}
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			) : (
+				<div className="table-panel__empty">
+					<h3>No member was found.</h3>
+				</div>
+			)}
 		</div>
 	);
 };

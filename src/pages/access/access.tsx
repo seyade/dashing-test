@@ -9,14 +9,14 @@ import "./access.scss";
 type ProfileData = {
 	username: string;
 	password: string;
-	role?: string[];
+	role?: string;
 };
 
 type User = {
 	name: string;
 	email: string;
 	username: string;
-	website: string;
+	website?: string;
 };
 
 const Access = () => {
@@ -69,17 +69,20 @@ const Access = () => {
 					<Link to="/">DZCHAIN</Link>
 				</h1>
 
+				<h2>{profileData && `@${profileData?.username}`}</h2>
+
 				<Button className="page__sign-out" onClick={handleSignOut}>
 					Sign out
 				</Button>
 			</header>
 
 			<div className="page-content">
-				<h1 className="page-title">
-					Welcome to your metaverse team,{" "}
-					{profileData && `@${profileData?.username}`}
-				</h1>
-				<Table<User> data={users} columns={columns} />
+				<h1 className="page-title">Welcome to your metaverse team</h1>
+				<Table<User>
+					data={users}
+					columns={columns}
+					hasAccess={profileData?.role}
+				/>
 			</div>
 		</div>
 	);
